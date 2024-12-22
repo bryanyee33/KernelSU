@@ -1,16 +1,7 @@
 name: Build LKM for KernelSU
 on:
-  push:
-    branches: ["main", "ci", "checkci"]
-    paths:
-      - ".github/workflows/build-lkm.yml"
-      - 'kernel/**'
-  pull_request:
-    branches: ["main"]
-    paths:
-      - ".github/workflows/build-lkm.yml"
-      - 'kernel/**'
   workflow_call:
+  workflow_dispatch:
 jobs:
   build-lkm:
     strategy:
