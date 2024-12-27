@@ -141,6 +141,19 @@ jobs:
           repo status
           echo "[+] KernelSU setup done."
 
+      - name: Setup susfs4ksu
+        run: |
+          cd $GITHUB_WORKSPACE/android-kernel
+          GKI_ROOT=$(pwd)
+          git clone https://gitlab.com/simonpunk/susfs4ksu.git --depth 1 --branch gki-${{ inputs.version }}
+          cp -r susfs4ksu/kernel_patches/KernelSU/* $GITHUB_WORKSPACE/KernelSU
+          rm -r susfs4ksu/kernel_patches/KernelSU
+          cp -r susfs4ksu/kernel_patches/* $GKI_ROOT/common
+          cd $GITHUB_WORKSPACE/KernelSU
+          patch -p1 < 10_enable_susfs_for_ksu.patch
+          cd $GKI_ROOT/common
+          patch -p1 < 50_add_susfs_in_gki-${{ inputs.version }}.patch
+
       - name: Symbol magic
         run: |
           echo "[+] Export all symbol from abi_gki_aarch64.xml"
