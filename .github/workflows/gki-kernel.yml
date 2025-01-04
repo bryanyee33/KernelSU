@@ -154,6 +154,12 @@ jobs:
           cd $GKI_ROOT/common
           patch -p1 < 50_add_susfs_in_gki-${{ inputs.version }}.patch
 
+      - name: Include custom defconfig
+        run: |
+          cat $GITHUB_WORKSPACE/KernelSU/kernel/custom_defconfig >> \
+              $GITHUB_WORKSPACE/android-kernel/common/arch/arm64/configs/gki_defconfig
+          sed -i 's/check_defconfig/true/g' $GITHUB_WORKSPACE/android-kernel/common/build.config.gki
+
       - name: Symbol magic
         run: |
           echo "[+] Export all symbol from abi_gki_aarch64.xml"
